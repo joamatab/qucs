@@ -97,16 +97,15 @@ def econst(b, a):
     and 'b' coefficients.
     '''
     constants = np.zeros(len(a)+2)
-    steps = 0
-    for i in range(len(a)): # determine number of steps
-      if (b[i] != 0 or a[i] != 0):
-        steps += 1
-    p = 0
-    for i in range(len(a)): # determine highest coefficient index
-      if (b[len(a)-1-i] != 0 or
-          a[len(a)-1-i] != 0):
-        p = len(a)-1 - i;
-        break;
+    steps = sum(b[i] != 0 or a[i] != 0 for i in range(len(a)))
+    p = next(
+        (
+            len(a) - 1 - i
+            for i in range(len(a))
+            if (b[len(a) - 1 - i] != 0 or a[len(a) - 1 - i] != 0)
+        ),
+        0,
+    )
 
     coeff = 0          # check order of method
     q = 0
@@ -138,7 +137,7 @@ def econst(b, a):
       constants[q] = coeff
       q += 1
     print("order %i, error constant %.4f" %(q-2, coeff))
-    return constants[0:-1]
+    return constants[:-1]
 
 
 def fig_stabgears(show=False):
@@ -374,8 +373,7 @@ def zl_hamm_jen(u, er):
     f = 6 + (2 * pi - 6) * exp ( -power( 30.666/u, 0.7528) )
     # eq [11.5]
     d = Z0 / 2 / pi * log ( f / u + sqrt(1 + power( 2/u, 2)) )
-    zl = d / sqrt (g)
-    return(zl)
+    return d / sqrt (g)
 
 def zl_schneider(u, er):
     '''Chapter 11
@@ -452,7 +450,14 @@ def fig_mscomparezl(show=False):
     zl = zl_hamm_jen(u, er)
     zlref = zl
     lbl = "Hammerstad and Jensen"
-    plt.plot(u, (zl - zlref)/zlref * 100, '.', label=lbl, color="g", linewidth=2)
+    plt.plot(
+        u,
+        (zlref - zlref) / zlref * 100,
+        '.',
+        label=lbl,
+        color="g",
+        linewidth=2,
+    )
 
     zl2 = zl_schneider(u, er)
     lbl="Schneider"

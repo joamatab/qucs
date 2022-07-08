@@ -20,7 +20,7 @@ c = data['Cx']
 plt.loglog(x,y[0,:],'-rx')
 plt.loglog(x,y[4,:],'-go')
 
-plt.legend(['Cx=' + str(c[0]), 'Cx=' + str(c[4])])
+plt.legend([f'Cx={str(c[0])}', f'Cx={str(c[4])}'])
 
 plt.xlabel('acfrequency')
 plt.ylabel('abs(out.v)')
