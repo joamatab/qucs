@@ -46,12 +46,12 @@ def parse_file(name):
         else:
             jind = line.find('j')
 
-            if(jind == -1):
+            if (jind == -1):
                 # real number -> just parse it
                 val = float(line)
             else:
                 # complex number -> break into re/im part
-                val_re = line[0:jind-1]
+                val_re = line[:jind-1]
                 sign = line[jind-1]
                 val_im = sign + line[jind+1:-1]
                 # and convert it into a complex number

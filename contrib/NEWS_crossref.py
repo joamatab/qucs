@@ -6,6 +6,7 @@
   Similar to [#123], [PR#123] and [SF#123].
 
 '''
+
 # TODO, should we modify the NEWS file in place?
 
 import argparse
@@ -25,17 +26,13 @@ args = parser.parse_args()
 # Footer note
 footer = '<!-- Cross reference generated with NEWS_crossref.py -->\n'
 
-# Read input NEWS file
-# Avoid adding footer and references twice
-f_in = open(args.input)
-infile = ""
-for line in f_in:
-    if line.strip() == footer.strip():
-        break
-    else:
-        infile += line
-f_in.close()
-
+with open(args.input) as f_in:
+    infile = ""
+    for line in f_in:
+        if line.strip() == footer.strip():
+            break
+        else:
+            infile += line
 # Parse issues and pull requests (GitHub), and bugs (SourceForge)
 re_issue = re.compile(r'\[#[0-9]+\]')
 re_pull  = re.compile(r'\[PR#[0-9]+\]')
@@ -68,10 +65,8 @@ for ref in bug:
     link = '%s: https://sourceforge.net/p/qucs/bugs/%s\n' %(ref, str(number))
     references += link
 
-# Write annotated NEWS file
-f_out = open(args.output, 'w')
-f_out.write(infile)
-f_out.write(footer)
-f_out.write(references)
-f_out.close()
+with open(args.output, 'w') as f_out:
+    f_out.write(infile)
+    f_out.write(footer)
+    f_out.write(references)
 
